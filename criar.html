@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Criar tópico</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+<header>
+
+<h1>📝 Criar tópico</h1>
+
+<nav>
+    <a href="index.html">🏠 Início</a>
+    <a href="criar.html">📝 Criar</a>
+    <a href="populares.html">🔥 Populares</a>
+    <a href="perfil.html">👤 Perfil</a>
+    <a href="config.html">⚙️ Config</a>
+</nav>
+
+</header>
+
+
+
+<main>
+
+<div class="card">
+
+
+<h2>Novo tópico</h2>
+
+
+<input 
+id="titulo"
+placeholder="Título do tópico"
+>
+
+
+
+<textarea 
+id="texto"
+placeholder="Escreva sua mensagem..."
+rows="6">
+</textarea>
+
+
+
+<label>
+📷 Adicionar imagem:
+</label>
+
+
+<input
+type="file"
+id="imagem"
+accept="image/*"
+>
+
+
+
+<img
+id="preview"
+style="
+display:none;
+max-width:100%;
+margin-top:10px;
+border-radius:10px;
+">
+
+
+
+<button onclick="criarPost()">
+🚀 Publicar tópico
+</button>
+
+
+
+</div>
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="forum.js"></script>
+
+
+
+<script>
+
+
+// Pré-visualização da imagem
+
+document
+.getElementById("imagem")
+.addEventListener("change", function(){
+
+
+let arquivo = this.files[0];
+
+
+if(arquivo){
+
+
+let leitor = new FileReader();
+
+
+leitor.onload=function(e){
+
+
+let img =
+document.getElementById("preview");
+
+
+img.src=e.target.result;
+
+img.style.display="block";
+
+
+}
+
+
+leitor.readAsDataURL(arquivo);
+
+
+
+}
+
+
+});
+
+
+</script>
+
+
+</body>
+
+</html>

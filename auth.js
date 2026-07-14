@@ -75,6 +75,8 @@ await window.db
 
     if(erroPerfil){
 
+        alert(JSON.stringify(erroPerfil));
+        
         console.log(erroPerfil);
 
         alert("Erro ao criar perfil");

@@ -16,20 +16,28 @@
 <body>
 
 
-<header>
-<h1>🔐 Login</h1>
-</header>
+<h1>Entrar</h1>
 
 
-<main>
-
-<div class="card">
+<div class="form">
 
 
-<input id="loginNome" placeholder="Usuário">
+<input 
+id="email" 
+type="email" 
+placeholder="Email">
 
 
-<input id="loginSenha" type="password" placeholder="Senha">
+<br>
+
+
+<input 
+id="senha" 
+type="password" 
+placeholder="Senha">
+
+
+<br>
 
 
 <button onclick="login()">
@@ -38,15 +46,23 @@ Entrar
 
 
 <p>
-Não tem conta?
-<a href="cadastro.html">Cadastrar</a>
+
+Ainda não tem conta?
+
+<a href="cadastro.html">
+Criar conta
+</a>
+
 </p>
 
 
 </div>
 
-</main>
 
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
 
 <script src="auth.js"></script>
 

@@ -2,56 +2,48 @@
 <html lang="pt-BR">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tópico</title>
 
-<title>Tópico</title>
-
-<link rel="stylesheet" href="style.css">
-
+    <link rel="stylesheet" href="style.css">
 </head>
 
 
 <body>
 
 
-<header>
+    <header>
 
-<h1>💬 Tópico</h1>
+        <h1>Fórum</h1>
 
-<nav>
-<a href="index.html">🏠 Início</a>
-<a href="criar.html">📝 Criar</a>
-<a href="perfil.html">👤 Perfil</a>
-</nav>
+        <a href="index.html">
+            ← Voltar
+        </a>
 
-</header>
+    </header>
 
 
 
-<main>
+    <main>
 
-<div class="card" id="topico">
+        <div id="topico">
 
-Carregando...
+            Carregando tópico...
 
-</div>
-
-
-</main>
+        </div>
 
 
-
-<script src="forum.js"></script>
-
-
-<script>
-
-abrirTopico();
+    </main>
 
 
-</script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="supabase.js"></script>
+
+    <script src="forum.js"></script>
 
 
 </body>

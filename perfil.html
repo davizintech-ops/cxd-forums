@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Perfil</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+<header>
+<h1>👤 Perfil</h1>
+</header>
+
+
+<main>
+
+<div class="card">
+
+
+<img id="fotoPerfil"
+src="https://via.placeholder.com/150"
+width="150"
+height="150"
+style="border-radius:50%; object-fit:cover;">
+
+
+<br><br>
+
+
+<input 
+type="file"
+id="foto"
+accept="image/*"
+>
+
+
+<button onclick="salvarFoto()">
+Salvar foto
+</button>
+
+
+<h2 id="nomePerfil">
+Usuário
+</h2>
+
+
+<p id="status"></p>
+
+
+<button onclick="logout()">
+Sair
+</button>
+
+
+</div>
+
+</main>
+
+
+
+<script src="auth.js"></script>
+
+
+<script>
+
+let usuario =
+JSON.parse(localStorage.getItem("usuario"));
+
+
+if(usuario){
+
+document.getElementById("nomePerfil").innerHTML =
+usuario.nome;
+
+}
+
+
+
+let fotoSalva =
+localStorage.getItem("fotoPerfil");
+
+
+if(fotoSalva){
+
+document.getElementById("fotoPerfil").src =
+fotoSalva;
+
+}
+
+
+
+
+function salvarFoto(){
+
+
+let arquivo =
+document.getElementById("foto").files[0];
+
+
+if(!arquivo){
+
+alert("Escolha uma foto");
+
+return;
+
+}
+
+
+
+let leitor = new FileReader();
+
+
+leitor.onload=function(e){
+
+
+localStorage.setItem(
+"fotoPerfil",
+e.target.result
+);
+
+
+document.getElementById("fotoPerfil").src =
+e.target.result;
+
+
+alert("Foto salva!");
+
+}
+
+
+
+leitor.readAsDataURL(arquivo);
+
+
+
+}
+
+
+
+if(localStorage.getItem("logado")){
+
+document.getElementById("status").innerHTML =
+"🟢 Online";
+
+}else{
+
+document.getElementById("status").innerHTML =
+"⚪ Offline";
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>

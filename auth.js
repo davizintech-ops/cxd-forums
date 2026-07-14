@@ -247,7 +247,6 @@ async function pegarUsuario(){
     return perfil;
 
 }
-}
 
 
 

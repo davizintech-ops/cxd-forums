@@ -1,22 +1,22 @@
-function iniciarSite(){
+async function iniciarSite(){
 
-let usuario = localStorage.getItem("usuario");
-
-
-let status = document.getElementById("status");
+    let status = document.getElementById("status");
 
 
-if(usuario){
+    let usuario = await pegarUsuario();
 
-status.innerHTML =
-"Logado como: <b>"+usuario+"</b>";
 
-}else{
+    if(usuario){
 
-status.innerHTML =
-"Você não está logado.";
+        status.innerHTML =
+        "Logado como: <b>" + usuario.nome + "</b>";
 
-}
+    }else{
+
+        status.innerHTML =
+        "Você não está logado.";
+
+    }
 
 }
 

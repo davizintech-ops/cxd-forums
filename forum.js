@@ -1,3 +1,7 @@
+let postAtual = null;
+
+
+// CRIAR TÓPICO
 async function criarPost(){
 
     let titulo = document.getElementById("titulo").value;
@@ -24,37 +28,27 @@ async function criarPost(){
     }
 
 
-
     const { error } = await window.db
     .from("posts")
     .insert({
 
         titulo: titulo,
-
         texto: texto,
-
         imagem: imagemUrl,
-
         autor: usuario ? usuario.nome : "Anônimo",
-
         curtidas: 0,
-
         respostas: []
 
     });
 
 
-
     if(error){
 
         console.log(error);
-
         alert("Erro ao criar tópico");
-
         return;
 
     }
-
 
 
     alert("Tópico criado!");
@@ -66,14 +60,10 @@ async function criarPost(){
 
 
 
-
-// MOSTRAR TÓPICOS NA PÁGINA INICIAL
-
+// MOSTRAR TÓPICOS
 async function carregarPosts(){
 
-
     let area = document.getElementById("posts");
-
 
     if(!area) return;
 
@@ -91,7 +81,6 @@ async function carregarPosts(){
     if(error){
 
         console.log(error);
-
         return;
 
     }
@@ -111,26 +100,18 @@ async function carregarPosts(){
 
 
             <h2 onclick="abrirPagina(${post.id})">
-
                 ${post.titulo}
-
             </h2>
 
 
 
             ${
                 post.imagem
-
                 ?
-
-                `<img src="${post.imagem}"
-                style="max-width:300px;
-                border-radius:10px;">`
-
+                `<img src="${post.imagem}" 
+                style="max-width:300px;border-radius:10px;">`
                 :
-
                 ""
-
             }
 
 
@@ -139,16 +120,12 @@ async function carregarPosts(){
 
 
             <small>
-
-                👤 ${post.autor}<br>
-
-                🆔 ${post.id}
-
+            👤 ${post.autor}<br>
+            🆔 ${post.id}
             </small>
 
 
         </div>
-
 
         `;
 
@@ -162,8 +139,7 @@ async function carregarPosts(){
 
 
 
-// ABRIR PÁGINA DO TÓPICO
-
+// IR PARA O TÓPICO
 function abrirPagina(id){
 
     window.location.href =
@@ -175,8 +151,7 @@ function abrirPagina(id){
 
 
 
-// MOSTRAR UM TÓPICO
-
+// ABRIR TÓPICO
 async function abrirTopico(){
 
 
@@ -187,12 +162,9 @@ async function abrirTopico(){
 
 
 
-    let params = new URLSearchParams(
+    let id = new URLSearchParams(
         window.location.search
-    );
-
-
-    let id = params.get("id");
+    ).get("id");
 
 
 
@@ -217,7 +189,7 @@ async function abrirTopico(){
 
 
 
-    let post = data;
+    postAtual = data;
 
 
 
@@ -225,50 +197,103 @@ async function abrirTopico(){
 
 
     <h1>
-
-    ${post.titulo}
-
+    ${data.titulo}
     </h1>
 
 
-
     ${
-        post.imagem
-
+        data.imagem
         ?
-
-        `<img src="${post.imagem}"
-        style="max-width:400px;
-        border-radius:10px;">`
-
+        `<img src="${data.imagem}" 
+        style="max-width:400px;border-radius:10px;">`
         :
-
         ""
-
     }
 
 
 
     <p>
-
-    ${post.texto.replace(/\n/g,"<br>")}
-
+    ${data.texto.replace(/\n/g,"<br>")}
     </p>
 
 
 
-    <hr>
-
-
-
-    👤 ${post.autor}<br>
-
-    🆔 ${post.id}<br>
-
-    🔥 ${post.curtidas}
+    <small>
+    👤 ${data.autor}<br>
+    🆔 ${data.id}<br>
+    🔥 ${data.curtidas}
+    </small>
 
 
     `;
+
+
+
+    mostrarRespostas();
+
+}
+
+
+
+
+
+// MOSTRAR RESPOSTAS
+function mostrarRespostas(){
+
+
+    let area = document.getElementById("respostas");
+
+
+    if(!area) return;
+
+
+
+    area.innerHTML = "";
+
+
+
+    if(!postAtual.respostas || postAtual.respostas.length === 0){
+
+        area.innerHTML =
+        "Nenhuma resposta ainda.";
+
+        return;
+
+    }
+
+
+
+    postAtual.respostas.forEach(r=>{
+
+
+        area.innerHTML += `
+
+        <div class="resposta">
+
+            <b>
+            👤 ${r.autor}
+            </b>
+
+
+            <p>
+            ${transformarLinks(data.texto).replace(/\n/g,"<br>")}
+            </p>
+
+
+            <small>
+            ${r.data}
+            </small>
+
+
+        </div>
+
+
+        <hr>
+
+        `;
+
+
+    });
 
 
 }
@@ -277,9 +302,82 @@ async function abrirTopico(){
 
 
 
+// ENVIAR RESPOSTA
+async function enviarResposta(){
+
+
+    let texto =
+    document.getElementById("resposta").value;
+
+
+
+    if(!texto){
+
+        alert("Digite uma resposta!");
+
+        return;
+
+    }
+
+
+
+    let usuario = JSON.parse(
+        localStorage.getItem("usuario")
+    );
+
+
+
+    let respostasAtuais =
+    postAtual.respostas || [];
+
+
+
+    respostasAtuais.push({
+
+        autor: usuario ? usuario.nome : "Anônimo",
+
+        texto: texto,
+
+        data: new Date().toISOString()
+
+    });
+
+
+
+    const { error } = await window.db
+    .from("posts")
+    .update({
+
+        respostas: respostasAtuais
+
+    })
+    .eq("id", postAtual.id);
+
+
+
+    if(error){
+
+        console.log(error);
+
+        alert("Erro ao salvar resposta");
+
+        return;
+
+    }
+
+
+
+    alert("Resposta enviada!");
+
+    location.reload();
+
+}
+
+
+
+
 
 // CONVERTER IMAGEM
-
 function converterImagem(arquivo){
 
 
@@ -297,12 +395,23 @@ function converterImagem(arquivo){
         };
 
 
-
         leitor.readAsDataURL(arquivo);
 
 
     });
 
+
+}
+
+
+
+
+function transformarLinks(texto){
+
+    return texto.replace(
+        /(https?:\/\/[^\s]+)/g,
+        '<a href="$1" target="_blank">$1</a>'
+    );
 
 }
 

@@ -66,6 +66,9 @@ async function criarPost(){
 
 
 
+
+// MOSTRAR TÓPICOS NA PÁGINA INICIAL
+
 async function carregarPosts(){
 
 
@@ -79,7 +82,9 @@ async function carregarPosts(){
     const { data, error } = await window.db
     .from("posts")
     .select("*")
-    .order("data", {ascending:false});
+    .order("data", {
+        ascending:false
+    });
 
 
 
@@ -104,41 +109,49 @@ async function carregarPosts(){
 
         <div class="post">
 
+
             <h2 onclick="abrirPagina(${post.id})">
+
                 ${post.titulo}
+
             </h2>
 
-
-            <p>
-                ${post.texto}
-            </p>
 
 
             ${
                 post.imagem
+
                 ?
-                `<img src="${post.imagem}" 
-                style="max-width:300px;border-radius:10px;">`
+
+                `<img src="${post.imagem}"
+                style="max-width:300px;
+                border-radius:10px;">`
+
                 :
+
                 ""
+
             }
 
 
+
+            <br>
+
+
             <small>
+
                 👤 ${post.autor}<br>
-                🆔 ${post.id}<br>
-                📅 ${post.data}
+
+                🆔 ${post.id}
+
             </small>
 
 
-            <br><br>
-
-
-            🔥 ${post.curtidas}
-
         </div>
 
+
         `;
+
 
     });
 
@@ -148,6 +161,8 @@ async function carregarPosts(){
 
 
 
+
+// ABRIR PÁGINA DO TÓPICO
 
 function abrirPagina(id){
 
@@ -160,12 +175,119 @@ function abrirPagina(id){
 
 
 
+// MOSTRAR UM TÓPICO
+
+async function abrirTopico(){
+
+
+    let area = document.getElementById("topico");
+
+
+    if(!area) return;
+
+
+
+    let params = new URLSearchParams(
+        window.location.search
+    );
+
+
+    let id = params.get("id");
+
+
+
+    const { data, error } = await window.db
+    .from("posts")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+
+
+    if(error){
+
+        console.log(error);
+
+        area.innerHTML =
+        "Tópico não encontrado";
+
+        return;
+
+    }
+
+
+
+    let post = data;
+
+
+
+    area.innerHTML = `
+
+
+    <h1>
+
+    ${post.titulo}
+
+    </h1>
+
+
+
+    ${
+        post.imagem
+
+        ?
+
+        `<img src="${post.imagem}"
+        style="max-width:400px;
+        border-radius:10px;">`
+
+        :
+
+        ""
+
+    }
+
+
+
+    <p>
+
+    ${post.texto.replace(/\n/g,"<br>")}
+
+    </p>
+
+
+
+    <hr>
+
+
+
+    👤 ${post.autor}<br>
+
+    🆔 ${post.id}<br>
+
+    🔥 ${post.curtidas}
+
+
+    `;
+
+
+}
+
+
+
+
+
+
+// CONVERTER IMAGEM
+
 function converterImagem(arquivo){
+
 
     return new Promise(resolve=>{
 
 
         let leitor = new FileReader();
+
 
 
         leitor.onload = e=>{
@@ -175,10 +297,12 @@ function converterImagem(arquivo){
         };
 
 
+
         leitor.readAsDataURL(arquivo);
 
 
     });
+
 
 }
 
@@ -187,3 +311,5 @@ function converterImagem(arquivo){
 
 
 carregarPosts();
+
+abrirTopico();

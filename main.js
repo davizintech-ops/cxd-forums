@@ -1,0 +1,1 @@
+async function iniciarSite(){const status=document.getElementById('status');if(!status||!window.db)return;try{const usuario=await pegarUsuario();if(usuario)status.innerHTML=`Logado como <b>${String(usuario.nome||'membro').replace(/[<>&]/g,'')}</b>`}catch(error){console.warn('Sessão indisponível',error)}}iniciarSite();
